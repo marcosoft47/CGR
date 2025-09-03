@@ -1,9 +1,6 @@
 #include <GL/freeglut.h>
 #include <math.h>
-
-#define PI 3.1415
   
-// Rotation
 static GLfloat yRot = 0.0f;
 static GLfloat xRot = 0.0f;
 static GLfloat zRot = 0.0f;
@@ -64,7 +61,6 @@ void SetupRC(){
     // Black blue background  
     float gray = 0.8;
     glClearColor(gray, gray, gray, 1.0f);  
-
 }
 
 // React to special keys
@@ -268,9 +264,9 @@ void renderCastle(void){
 	pObj = gluNewQuadric();  
 	gluQuadricNormals(pObj, GLU_SMOOTH); 
 
-    renderTower(pObj, castleSizeX,0,castleSizeZ);
+    renderTower(pObj, castleSizeX,0, castleSizeZ);
     renderTower(pObj, castleSizeX,0,-castleSizeZ);
-    renderTower(pObj,-castleSizeX,0,castleSizeZ);
+    renderTower(pObj,-castleSizeX,0, castleSizeZ);
     renderTower(pObj,-castleSizeX,0,-castleSizeZ);
 
     // Base
