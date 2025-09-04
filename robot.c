@@ -4,9 +4,17 @@
 static GLfloat yRot = 0.0f;
 static GLfloat xRot = 0.0f;
 static GLfloat zRot = 0.0f;
+
+static GLfloat xRotLeg = 0.0f;
+static GLfloat yRotLeg = 0.0f;
+static GLfloat zRotLeg = 0.0f;
+static GLfloat xRotArm = 0.0f;
+static GLfloat yRotArm = 0.0f;
+static GLfloat zRotArm = 0.0f;
+
 static GLfloat robotx = 0.0f;
 static GLfloat roboty = -3.0f;
-static GLfloat robotz = -17.0f;
+static GLfloat robotz = -50.0f;
 
 // Change viewing volume and viewport. Called when window is resized  
 void ChangeSize(int w, int h)  {  
@@ -75,6 +83,7 @@ void SpecialKeys(int key, int x, int y){
     
     if (key == GLUT_KEY_UP)
         xRot += 5.0f;
+
     if (key == GLUT_KEY_DOWN)
         xRot -= 5.0f;
     
@@ -101,19 +110,36 @@ void NormalKeys(unsigned char key, int x, int y){
         yRot = 0;
         zRot = 0;
     }
+
+    if (key == 'k')
+        xRotLeg += 5.0f;
+    if (key == 'j')
+        xRotLeg -= 5.0f;
+    if (key == 'm')
+        zRotArm += 5.0f;
+    if (key == 'n')
+        zRotArm -= 5.0f;
+
     if (key == 32)
         roboty -= 0.5f;
     if (key == 27)
         glutLeaveMainLoop();
+    
+    xRotLeg = fmod(xRotLeg, 360);
 
     glutPostRedisplay();
 }
-void renderLimb(GLUquadricObj *pObj){
+void renderLimb(GLUquadricObj *pObj, GLfloat xRotLimb, GLfloat yRotLimb, GLfloat zRotLimb){
     float length = 5;
     float r = 0.7;
     glPushMatrix();
 
     glPushMatrix();
+
+        glRotatef(xRotLimb,1,0,0);
+        glRotatef(180,0,1,0);
+        glRotatef(zRotLimb,0,0,1);
+
         glRotatef(-90,1,0,0);
         gluDisk(pObj,0,r,20,20);
         glRotatef(90,1,0,0);
@@ -201,13 +227,13 @@ void renderRobot(void){
     glColor3f(1,1,1);
     glPushMatrix();
         glTranslatef(-2,0,0);
-        renderLimb(pObj);
+        renderLimb(pObj,xRotLeg,yRotLeg,zRotLeg);
     glPopMatrix();
 
     glPushMatrix();
         glColor3f(0,0,1);
         glTranslatef(2,0,0);
-        renderLimb(pObj);
+        renderLimb(pObj,-xRotLeg,-yRotLeg,-zRotLeg);
     glPopMatrix();
 
     // Arms
@@ -215,14 +241,14 @@ void renderRobot(void){
         glColor3f(1,0,0);
         glTranslatef(-2,6,0);
         glRotatef(-90,0,0,1);
-        renderLimb(pObj);
+        renderLimb(pObj,xRotArm,yRotArm,zRotArm);
     glPopMatrix();
 
     glPushMatrix();
         glColor3f(0,1,0);
         glTranslatef(2,6,0);
         glRotatef(90,0,0,1);
-        renderLimb(pObj);
+        renderLimb(pObj,-xRotArm,-yRotArm,-zRotArm);
     glPopMatrix();
 
     // Body
