@@ -184,6 +184,11 @@ void renderTower(GLUquadricObj *pObj, GLfloat x, GLfloat y, GLfloat z){
     renderWindow(r, h-2, 90);  // +X
     renderWindow(r, h-2, 180); // -Z
     renderWindow(r, h-2, -90); // -X
+    
+    renderWindow(r, h-3, 0);   // +Z
+    renderWindow(r, h-3, 90);  // +X
+    renderWindow(r, h-3, 180); // -Z
+    renderWindow(r, h-3, -90); // -X
 
     glPopMatrix();
 }

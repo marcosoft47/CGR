@@ -2,5 +2,4 @@
 
 ## Requisitos
 - OpenGL
-- glad
-- GLFW# CGR
+- glut

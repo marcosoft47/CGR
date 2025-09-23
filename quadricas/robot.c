@@ -66,7 +66,7 @@ void SetupRC(){
     // Set Material properties to follow glColor values  
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);  
   
-    float gray = 0.8;
+    float gray = 0.6;
     glClearColor(gray, gray, gray, 1.0f);  
 }
 // React to special keys
@@ -109,16 +109,27 @@ void NormalKeys(unsigned char key, int x, int y){
         xRot = 0;
         yRot = 0;
         zRot = 0;
+
+        xRotLeg = 0.0f;
+        yRotLeg = 0.0f;
+        zRotLeg = 0.0f;
+        xRotArm = 0.0f;
+        yRotArm = 0.0f;
+        zRotArm = 0.0f;
     }
 
     if (key == 'k')
         xRotLeg += 5.0f;
     if (key == 'j')
         xRotLeg -= 5.0f;
-    if (key == 'm')
+    if (key == '8')
         zRotArm += 5.0f;
-    if (key == 'n')
+    if (key == '2')
         zRotArm -= 5.0f;
+    if (key == '4')
+        xRotArm += 5.0f;
+    if (key == '6')
+        xRotArm -= 5.0f;
 
     if (key == 32)
         roboty -= 0.5f;
@@ -248,7 +259,7 @@ void renderRobot(void){
         glColor3f(0,1,0);
         glTranslatef(2,6,0);
         glRotatef(90,0,0,1);
-        renderLimb(pObj,-xRotArm,-yRotArm,-zRotArm);
+        renderLimb(pObj,xRotArm,-yRotArm,-zRotArm);
     glPopMatrix();
 
     // Body
