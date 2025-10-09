@@ -5,15 +5,15 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-#define MAX_PARTICLES 500
-#define PARTICLES_PER_FRAME 5
+#define MAX_PARTICLES 1000
+#define PARTICLES_PER_FRAME 10
 
 // Estrutura para representar uma única partícula
 typedef struct {
     float x, y, z;          // Posição
     float vx, vy, vz;       // Velocidade
     float r, g, b, a;       // Cor e transparência
-    float initialLifespan;  // Vida útil inicial para cálculo do fade
+    float initialLifespan;  // Vida útil inicial
     float lifespan;         // Tempo de vida restante em segundos
     int active;             // Se a partícula está ativa
 } Particle;
