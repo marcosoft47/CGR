@@ -6,27 +6,23 @@
 #include <time.h>
 #include <stdbool.h>
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
+#define PI 3.14159265358979323846
+// Valor modificavel para ajustar a janela
+int SCREEN_WIDTH = 1280;
+int SCREEN_HEIGHT = 720;
 
-// --- CONFIGURAÇÕES ---
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
+// boids
 #define NUM_BOIDS 250
-
-// --- PARÂMETROS DOS BOIDS ---
 #define PERCEPTION_RADIUS 70.0f
 #define MAX_SPEED 150.0f
 #define MAX_FORCE 15.0f
-#define MOUSE_REPEL_RADIUS 12.0f
+#define MOUSE_REPEL_RADIUS 20.0f
 
-#define SEPARATION_WEIGHT 5.0f
+#define SEPARATION_WEIGHT 20.0f
 #define ALIGNMENT_WEIGHT  2.0f
-#define COHESION_WEIGHT   1.0f
+#define COHESION_WEIGHT   0.3f
 #define MOUSE_REPEL_WEIGHT 3.0f
 
-// --- ESTRUTURAS E VETORES 2D ---
 typedef struct { float x, y; } Vector2;
 
 Vector2 vec2_add(Vector2 v1, Vector2 v2) { return (Vector2){v1.x + v2.x, v1.y + v2.y}; }
@@ -55,10 +51,8 @@ typedef struct {
 
 Boid boids[NUM_BOIDS];
 Vector2 mouseWorldPos = {0,0};
-int windowWidth = SCREEN_WIDTH;
-int windowHeight = SCREEN_HEIGHT;
 
-// --- COMPORTAMENTOS DOS BOIDS (ADAPTADOS PARA 2D) ---
+// comportamento
 Vector2 separation(Boid* current, Boid allBoids[], int currentIndex) {
     Vector2 steer = {0,0};
     int count = 0;
@@ -133,7 +127,7 @@ Vector2 flee(Boid* b, Vector2 target) {
     return steer;
 }
 
-// --- FUNÇÕES PRINCIPAIS ---
+// o resto
 
 void applyBehaviors(Boid* b, int boidIndex) {
     Vector2 sep = separation(b, boids, boidIndex);
@@ -164,23 +158,23 @@ void updateBoids(float deltaTime) {
         b->position = vec2_add(b->position, vec2_mul_scalar(b->velocity, deltaTime));
 
         // Wraparound (peixes que saem de um lado aparecem do outro)
-        if (b->position.x > windowWidth) b->position.x = 0;
-        if (b->position.x < 0) b->position.x = windowWidth;
-        if (b->position.y > windowHeight) b->position.y = 0;
-        if (b->position.y < 0) b->position.y = windowHeight;
+        if (b->position.x > SCREEN_WIDTH) b->position.x = 0;
+        if (b->position.x < 0) b->position.x = SCREEN_WIDTH;
+        if (b->position.y > SCREEN_HEIGHT) b->position.y = 0;
+        if (b->position.y < 0) b->position.y = SCREEN_HEIGHT;
     }
 }
 
 void initBoids() {
     for (int i = 0; i < NUM_BOIDS; i++) {
-        boids[i].position.x = (float)(rand() % windowWidth);
-        boids[i].position.y = (float)(rand() % windowHeight);
+        boids[i].position.x = (float)(rand() % SCREEN_WIDTH);
+        boids[i].position.y = (float)(rand() % SCREEN_HEIGHT);
         boids[i].velocity.x = (float)(rand() % 200 - 100);
         boids[i].velocity.y = (float)(rand() % 200 - 100);
         boids[i].acceleration = (Vector2){0,0};
         boids[i].maxSpeed = MAX_SPEED;
         boids[i].maxForce = MAX_FORCE;
-        boids[i].r = 0.5f + (float)(rand() % 50) / 100.0f; // Tons de azul/ciano
+        boids[i].r = 0.5f + (float)(rand() % 50) / 100.0f;
         boids[i].g = 0.8f + (float)(rand() % 20) / 100.0f;
         boids[i].b = 1.0f;
     }
@@ -191,7 +185,7 @@ void drawBoid(Boid* b) {
     glTranslatef(b->position.x, b->position.y, 0.0f);
 
     // Calcula o ângulo a partir da velocidade para orientar o peixe
-    float angle = atan2(b->velocity.y, b->velocity.x) * 180.0f / M_PI;
+    float angle = atan2(b->velocity.y, b->velocity.x) * 180.0f / PI;
     glRotatef(angle, 0.0f, 0.0f, 1.0f);
 
     glColor3f(b->r, b->g, b->b);
@@ -210,12 +204,12 @@ void drawBoid(Boid* b) {
 void cursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
     // As coordenadas do mundo 2D são as mesmas da tela com o gluOrtho2D
     mouseWorldPos.x = (float)xpos;
-    mouseWorldPos.y = (float)windowHeight - (float)ypos; // Inverte Y
+    mouseWorldPos.y = (float)SCREEN_HEIGHT - (float)ypos; // Inverte Y
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    windowWidth = width;
-    windowHeight = height;
+    SCREEN_WIDTH = width;
+    SCREEN_HEIGHT = height;
     glViewport(0, 0, width, height);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -273,7 +267,7 @@ int main(void) {
         glBegin(GL_TRIANGLE_FAN);
             glVertex2f(mouseWorldPos.x, mouseWorldPos.y);
             for(int i = 0; i <= 20; i++) {
-                float angle = i * (2.0f * M_PI / 20.0f);
+                float angle = i * (2.0f * PI / 20.0f);
                 glVertex2f(mouseWorldPos.x + cos(angle) * MOUSE_REPEL_RADIUS, 
                            mouseWorldPos.y + sin(angle) * MOUSE_REPEL_RADIUS);
             }
