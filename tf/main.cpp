@@ -8,8 +8,12 @@
  * * Compilação (Exemplo Linux/GCC):
  * g++ main.cpp glad.c -o cloth_sim -lglfw -lGL -ldl -I.
  * * Controles:
+ * - Q: Sair
  * - W: Ativar/Desativar Vento
- * - ESC: Sair
+ * - Z: Zoom out
+ * - X: Zoom in
+ * - Seta cima/baixo: Ajustar vento
+ * - Seta esquerda/direita: Girar tecido
  */
 
 #include <glad/glad.h>
@@ -346,7 +350,7 @@ unsigned int compileShader(unsigned int type, const char* source) {
 }
 
 void processInput(GLFWwindow *window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
     
     // Controle do Vento (W = Toggle)
@@ -394,7 +398,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Tecido OpenGL - [Setas] Cam/Vento [Z/X] Zoom [W] Ligar/Desl", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Tecido", NULL, NULL);
     if (window == NULL) {
         std::cout << "Falha ao criar janela GLFW" << std::endl;
         glfwTerminate();
