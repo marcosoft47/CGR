@@ -1,12 +1,6 @@
 /**
  * Simulação de Tecido com OpenGL e C++
- * * Requisitos:
- * - GLFW (Gerenciamento de Janela)
- * - GLAD (Carregamento de funções OpenGL)
- * - GLM (Matemática vetorial)
- * - stb_image.h (Carregamento de imagens - single header library)
- * * Compilação (Exemplo Linux/GCC):
- * g++ main.cpp glad.c -o cloth_sim -lglfw -lGL -ldl -I.
+ * g++ main.cpp glad/glad.c -o cloth_sim -lglfw -lGL -ldl -I.
  * * Controles:
  * - Q: Sair
  * - W: Ativar/Desativar Vento
@@ -256,7 +250,7 @@ public:
                 // Vento aplica força variável
                 glm::vec3 windForce = windDir * (0.5f + 0.5f * noise);
                 
-                // Produto escalar para aplicar vento baseado na orientação da face (opcional, simplificado aqui)
+                // Produto escalar para aplicar vento baseado na orientação da face
                 p.addForce(windForce); 
             }
         }
@@ -327,7 +321,7 @@ unsigned int loadTexture(const char* path) {
         glGenerateMipmap(GL_TEXTURE_2D);
         std::cout << "Textura carregada: " << path << std::endl;
     } else {
-        // std::cout << "Falha ao carregar textura. Usando padrao xadrez." << std::endl; // Comentado para não poluir
+        // std::cout << "Falha ao carregar textura. Usando padrao xadrez." << std::endl
         return createCheckerboardTexture();
     }
     stbi_image_free(data);
@@ -425,7 +419,7 @@ int main() {
 
     // --- Init Cloth ---
     cloth = new Cloth(CLOTH_WIDTH, CLOTH_HEIGHT);
-    textureID = loadTexture("larva.png"); // Tenta carregar 'texture.jpg' ou cria xadrez
+    textureID = loadTexture("brasil.png"); // Tenta carregar textura ou cria xadrez
 
     // --- Buffers ---
     glGenVertexArrays(1, &VAO);
